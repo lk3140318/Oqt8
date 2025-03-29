@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TelePost Pro - Multi-Group Poster</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>TelePost Pro (Prototype)</h1>
+
+        <!-- 1. Group Management -->
+        <section id="group-management">
+            <h2>1️⃣ Manage Groups/Channels</h2>
+            <div class="form-group">
+                <input type="text" id="group-id-input" placeholder="Enter Group/Channel Chat ID (e.g., -100123...)">
+                <input type="text" id="group-name-input" placeholder="Enter a Nickname for this Group">
+                <button id="add-group-btn">Add Group</button>
+            </div>
+            <h3>Saved Groups:</h3>
+            <ul id="group-list">
+                <!-- Groups will be listed here -->
+            </ul>
+        </section>
+
+        <hr>
+
+        <!-- 2. Post Creation & Scheduling -->
+        <section id="post-creation">
+            <h2>2️⃣ Create & Send Post</h2>
+            <div class="form-group">
+                <label for="post-content">Post Content (Message or Link):</label>
+                <textarea id="post-content" rows="4" placeholder="Type your message or paste a link here..."></textarea>
+            </div>
+
+            <!-- 3. Custom Message (Included in Post Content) -->
+            <!-- Assuming custom message is part of the main content -->
+
+            <div class="form-group">
+                <h3>Select Target Groups/Channels:</h3>
+                <div id="target-groups">
+                    <!-- Checkboxes for groups will appear here -->
+                    <p><i>Add groups above to see them here.</i></p>
+                </div>
+            </div>
+
+            <!-- 4. Auto-Send Feature -->
+            <div class="form-group send-options">
+                <h3>Send Options:</h3>
+                <label>
+                    <input type="radio" name="send-option" value="now" checked> Send Now
+                </label>
+                <label>
+                    <input type="radio" name="send-option" value="schedule"> Schedule for Later
+                </label>
+                <input type="datetime-local" id="schedule-time" style="display: none;">
+            </div>
+
+            <button id="send-post-btn">Submit Post</button>
+        </section>
+
+        <hr>
+
+        <!-- 5. Tracking & Logs -->
+        <section id="logs">
+            <h2>5️⃣ Tracking & Logs</h2>
+            <ul id="log-list">
+                <!-- Log entries will be listed here -->
+                <li><i>No posts sent yet.</i></li>
+            </ul>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+                  </html>
