@@ -1,222 +1,139 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- DOM Elements ---
-    const groupIdInput = document.getElementById('group-id-input');
-    const groupNameInput = document.getElementById('group-name-input');
-    const addGroupBtn = document.getElementById('add-group-btn');
-    const groupListUl = document.getElementById('group-list');
-    const postContentTextarea = document.getElementById('post-content');
-    const targetGroupsDiv = document.getElementById('target-groups');
-    const sendOptionRadios = document.querySelectorAll('input[name="send-option"]');
-    const scheduleTimeInput = document.getElementById('schedule-time');
-    const sendPostBtn = document.getElementById('send-post-btn');
-    const logListUl = document.getElementById('log-list');
+    // --- Element Selectors ---
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const body = document.body;
+    const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
+    const subscribeBtn = document.getElementById('subscribe-btn');
+    const loginModal = document.getElementById('login-modal');
+    const signupModal = document.getElementById('signup-modal');
+    const subscribeModal = document.getElementById('subscribe-modal');
+    const playerModal = document.getElementById('player-modal');
+    const closeModalBtns = document.querySelectorAll('.close-btn');
+    const contentCards = document.querySelectorAll('.content-card');
+    const playerTitle = document.getElementById('player-title');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const notifyBtn = document.getElementById('notify-btn');
 
-    // --- Data Storage (In-Memory) ---
-    let groups = []; // Array to hold { id: 'chatId', name: 'nickname' }
-    let logs = [];   // Array to hold log entries
-
-    // --- Functions ---
-
-    // Render the list of saved groups
-    function renderGroupList() {
-        groupListUl.innerHTML = ''; // Clear existing list
-        if (groups.length === 0) {
-            groupListUl.innerHTML = '<li><i>No groups added yet.</i></li>';
-            return;
-        }
-        groups.forEach((group, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span><strong>${group.name}</strong> (${group.id})</span>
-                <button class="remove-group-btn" data-index="${index}">Remove</button>
-            `;
-            groupListUl.appendChild(li);
-        });
-    }
-
-    // Render checkboxes for selecting target groups
-    function renderTargetGroups() {
-        targetGroupsDiv.innerHTML = '<h3>Select Target Groups/Channels:</h3>'; // Clear existing checkboxes
-        if (groups.length === 0) {
-            targetGroupsDiv.innerHTML += '<p><i>Add groups in section 1 to see them here.</i></p>';
-            return;
-        }
-        groups.forEach(group => {
-            const label = document.createElement('label');
-            label.innerHTML = `
-                <input type="checkbox" name="target-group" value="${group.id}">
-                ${group.name} (${group.id})
-            `;
-            targetGroupsDiv.appendChild(label);
-        });
-    }
-
-    // Render the log list
-    function renderLogs() {
-        logListUl.innerHTML = ''; // Clear existing logs
-        if (logs.length === 0) {
-            logListUl.innerHTML = '<li><i>No posts sent yet.</i></li>';
-            return;
-        }
-        // Display latest logs first
-        [...logs].reverse().forEach(log => {
-            const li = document.createElement('li');
-            const targetsString = log.targets.map(t => t.name).join(', ') || 'N/A';
-            const contentPreview = log.content.substring(0, 50) + (log.content.length > 50 ? '...' : '');
-
-            li.innerHTML = `
-                <span>"${contentPreview}" to [${targetsString}]</span>
-                <span>
-                    <span class="log-status ${log.status.toLowerCase()}">${log.status}</span>
-                    <span class="log-time">${log.timestamp.toLocaleString()}</span>
-                </span>
-            `;
-            logListUl.appendChild(li);
-        });
-    }
-
-     // Add a new log entry
-    function addLog(content, targets, status, timestamp = new Date()) {
-        logs.push({ content, targets, status, timestamp });
-        renderLogs(); // Update the UI
-    }
-
-    // Handle adding a new group
-    function handleAddGroup() {
-        const id = groupIdInput.value.trim();
-        const name = groupNameInput.value.trim();
-
-        if (!id || !name) {
-            alert('Please enter both Chat ID and a Nickname.');
-            return;
-        }
-         // Basic check for potential ID format (optional)
-        if (!id.match(/^-?\d+$/)) {
-            alert('Chat ID should usually be a number (can be negative).');
-            // return; // You might want to allow flexibility here
-        }
-        // Check for duplicates
-        if (groups.some(g => g.id === id)) {
-             alert('This Group/Channel ID has already been added.');
-             return;
-        }
-
-
-        groups.push({ id, name });
-        groupIdInput.value = ''; // Clear inputs
-        groupNameInput.value = '';
-        renderGroupList();
-        renderTargetGroups();
-        console.log("Groups:", groups); // For debugging
-    }
-
-    // Handle removing a group
-    function handleRemoveGroup(event) {
-        if (event.target.classList.contains('remove-group-btn')) {
-            const indexToRemove = parseInt(event.target.getAttribute('data-index'), 10);
-            if (!isNaN(indexToRemove)) {
-                groups.splice(indexToRemove, 1);
-                renderGroupList();
-                renderTargetGroups();
-                console.log("Groups after removal:", groups); // For debugging
-            }
-        }
-    }
-
-    // Handle sending or scheduling a post
-    function handleSubmitPost() {
-        const content = postContentTextarea.value.trim();
-        const selectedCheckboxes = document.querySelectorAll('input[name="target-group"]:checked');
-        const selectedSendOption = document.querySelector('input[name="send-option"]:checked').value;
-        const scheduleTimeValue = scheduleTimeInput.value;
-
-        if (!content) {
-            alert('Please enter some content for the post.');
-            return;
-        }
-        if (selectedCheckboxes.length === 0) {
-            alert('Please select at least one target group/channel.');
-            return;
-        }
-
-        const targetGroupDetails = Array.from(selectedCheckboxes).map(checkbox => {
-            const groupId = checkbox.value;
-            const group = groups.find(g => g.id === groupId);
-            return group ? { id: group.id, name: group.name } : null; // Store name for logging
-        }).filter(g => g !== null); // Filter out potential inconsistencies
-
-        const timestamp = new Date();
-
-        if (selectedSendOption === 'now') {
-            // Simulate immediate sending
-            console.log("Simulating Send Now:", { content, targets: targetGroupDetails });
-            addLog(content, targetGroupDetails, 'Sent (Simulated)', timestamp);
-            // In a real app, this would trigger a backend API call
-        } else if (selectedSendOption === 'schedule') {
-            if (!scheduleTimeValue) {
-                alert('Please select a date and time for scheduling.');
-                return;
-            }
-            const scheduleDateTime = new Date(scheduleTimeValue);
-            if (isNaN(scheduleDateTime.getTime()) || scheduleDateTime <= new Date()) {
-                alert('Please select a valid future date and time.');
-                return;
-            }
-
-            const delay = scheduleDateTime.getTime() - Date.now();
-            console.log(`Scheduling post in ${delay / 1000} seconds:`, { content, targets: targetGroupDetails });
-
-             // Add a "Scheduled" log immediately
-            const scheduledLogEntry = { content, targets: targetGroupDetails, status: 'Scheduled', timestamp: scheduleDateTime };
-            logs.push(scheduledLogEntry);
-            renderLogs(); // Update UI to show it's scheduled
-
-            // Simulate sending at the scheduled time
-            setTimeout(() => {
-                console.log("Simulating Scheduled Send:", { content, targets: targetGroupDetails });
-                 // Find the original log entry and update its status
-                 const logIndex = logs.findIndex(log => log === scheduledLogEntry);
-                 if (logIndex !== -1) {
-                    logs[logIndex].status = 'Sent (Simulated)';
-                    logs[logIndex].timestamp = new Date(); // Update timestamp to actual send time
-                 } else {
-                    // Fallback if the original entry wasn't found (shouldn't happen)
-                     addLog(content, targetGroupDetails, 'Sent (Simulated)', new Date());
-                 }
-                renderLogs(); // Update UI again
-                // In a real app, a backend cron job or task queue would handle this
-            }, delay);
-        }
-
-        // Clear form after submission
-        postContentTextarea.value = '';
-        selectedCheckboxes.forEach(checkbox => checkbox.checked = false);
-        document.querySelector('input[name="send-option"][value="now"]').checked = true; // Reset to 'Send Now'
-        scheduleTimeInput.style.display = 'none';
-        scheduleTimeInput.value = '';
-    }
-
-    // Toggle schedule time input visibility
-    function handleSendOptionChange() {
-        if (document.querySelector('input[name="send-option"]:checked').value === 'schedule') {
-            scheduleTimeInput.style.display = 'inline-block';
+    // --- Theme Switching (Feature 7) ---
+    function toggleTheme() {
+        if (body.classList.contains('theme-light')) {
+            body.classList.replace('theme-light', 'theme-dark');
+            localStorage.setItem('theme', 'dark'); // Save preference
+            console.log("Theme changed to Dark");
         } else {
-            scheduleTimeInput.style.display = 'none';
+            body.classList.replace('theme-dark', 'theme-light');
+            localStorage.setItem('theme', 'light'); // Save preference
+            console.log("Theme changed to Light");
         }
     }
 
-    // --- Event Listeners ---
-    addGroupBtn.addEventListener('click', handleAddGroup);
-    groupListUl.addEventListener('click', handleRemoveGroup); // Use event delegation for remove buttons
-    sendPostBtn.addEventListener('click', handleSubmitPost);
-    sendOptionRadios.forEach(radio => {
-        radio.addEventListener('change', handleSendOptionChange);
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        body.classList.replace('theme-light', 'theme-dark');
+    }
+
+    themeToggleBtn.addEventListener('click', toggleTheme);
+
+    // --- Modal Handling ---
+    function openModal(modal) {
+        if (modal) {
+            modal.classList.remove('hidden');
+            console.log(`Modal opened: ${modal.id}`);
+        }
+    }
+
+    function closeModal(modal) {
+        if (modal) {
+            modal.classList.add('hidden');
+            console.log(`Modal closed: ${modal.id}`);
+        }
+    }
+
+    // Open Modals
+    loginBtn.addEventListener('click', () => openModal(loginModal));
+    signupBtn.addEventListener('click', () => openModal(signupModal));
+    subscribeBtn.addEventListener('click', () => openModal(subscribeModal));
+
+    // Close Modals via Close Button
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Find the closest parent modal and close it
+            const modal = btn.closest('.modal');
+            closeModal(modal);
+        });
     });
 
-    // --- Initial Render ---
-    renderGroupList();
-    renderTargetGroups();
-    renderLogs();
-    handleSendOptionChange(); // Set initial state of schedule input
+    // Close Modals by clicking outside the content (on the overlay)
+    window.addEventListener('click', (event) => {
+        if (event.target.classList.contains('modal')) {
+            closeModal(event.target);
+        }
+    });
 
+    // --- Placeholder Actions ---
+
+    // Content Card Click (Feature 5 - Placeholder Player)
+    contentCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const title = card.querySelector('h3')?.textContent || 'Selected Content';
+            const contentId = card.dataset.contentId || 'unknown';
+            console.log(`Content card clicked: ${title} (ID: ${contentId})`);
+            playerTitle.textContent = title; // Update player modal title
+            openModal(playerModal);
+            // In a real app: Fetch content details, check subscription, load actual video URL
+            console.log("Placeholder: Would normally check auth and load video stream here.");
+        });
+    });
+
+    // Authentication Form Submission (Feature 4 - Placeholder)
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent actual form submission
+        const email = loginForm.querySelector('input[type="email"]').value;
+        console.log(`Login attempt for: ${email}`);
+        alert('Login functionality requires a backend. This is just a demo.');
+        closeModal(loginModal);
+        // In real app: Send credentials to backend, handle response
+    });
+
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent actual form submission
+        const email = signupForm.querySelector('input[type="email"]').value;
+        console.log(`Signup attempt for: ${email}`);
+        alert('Signup functionality requires a backend. This is just a demo.');
+        closeModal(signupModal);
+        // In real app: Send details to backend, handle response (e.g., email verification)
+    });
+
+    // Subscription Button Click (Feature 6 - Placeholder)
+    // Find the button inside the subscription modal to simulate choosing premium
+    const choosePremiumBtn = subscribeModal.querySelector('.plan.premium button');
+    if(choosePremiumBtn) {
+        choosePremiumBtn.addEventListener('click', () => {
+             console.log("Choose Premium button clicked.");
+             alert('Payment gateway integration required for actual subscriptions.');
+             closeModal(subscribeModal);
+             // In real app: Redirect to payment gateway or use their JS library
+        });
+    }
+
+    // Push Notifications (Feature 10 - Placeholder)
+    notifyBtn.addEventListener('click', () => {
+        console.log("Enable Notifications button clicked.");
+        alert('Push notifications require browser permission and backend setup (like Firebase Cloud Messaging).');
+        // In real app: Use Notification API (Notification.requestPermission()) and send token to backend
+    });
+
+    // Multi-Language (Feature 3 - Placeholder)
+    const langSelector = document.getElementById('language-selector');
+    langSelector.addEventListener('change', (e) => {
+        console.log(`Language changed to: ${e.target.value}`);
+        alert('Full multi-language support requires internationalization (i18n) libraries and content translation management.');
+        // In real app: Load different language strings/content based on selection
+    });
+
+
+    console.log("OTT Platform Frontend Prototype Initialized.");
 });
