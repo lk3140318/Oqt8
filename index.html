@@ -3,76 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TelePost Pro - Multi-Group Poster</title>
+    <title>StreamVerse - Your Content Hub</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Add Font Awesome for icons (optional) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <div class="container">
-        <h1>TelePost Pro (Prototype)</h1>
+<body class="theme-light"> <!-- Default theme -->
 
-        <!-- 1. Group Management -->
-        <section id="group-management">
-            <h2>1️⃣ Manage Groups/Channels</h2>
-            <div class="form-group">
-                <input type="text" id="group-id-input" placeholder="Enter Group/Channel Chat ID (e.g., -100123...)">
-                <input type="text" id="group-name-input" placeholder="Enter a Nickname for this Group">
-                <button id="add-group-btn">Add Group</button>
-            </div>
-            <h3>Saved Groups:</h3>
-            <ul id="group-list">
-                <!-- Groups will be listed here -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">StreamVerse</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#web-series">Web Series</a></li>
+                <li><a href="#movies">Movies</a></li>
+                <li><a href="#short-films">Short Films</a></li>
             </ul>
+            <div class="nav-actions">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+                <button id="theme-toggle-btn"><i class="fas fa-adjust"></i></button>
+                <button id="login-btn">Login</button>
+                <button id="signup-btn" class="cta">Sign Up</button>
+                 <!-- Logged-in state placeholder (hidden initially) -->
+                 <div id="user-profile" class="hidden">
+                    <button id="profile-btn"><i class="fas fa-user"></i> My Account</button>
+                    <button id="logout-btn">Logout</button>
+                 </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 1️⃣ Homepage Design -->
+        <section id="hero-banner" class="hero">
+            <div class="hero-content">
+                <h2>Featured Blockbuster</h2>
+                <p>Watch the latest exclusive movie, available only on StreamVerse.</p>
+                <button class="cta">Play Now</button>
+                <button>More Info</button>
+            </div>
         </section>
 
-        <hr>
-
-        <!-- 2. Post Creation & Scheduling -->
-        <section id="post-creation">
-            <h2>2️⃣ Create & Send Post</h2>
-            <div class="form-group">
-                <label for="post-content">Post Content (Message or Link):</label>
-                <textarea id="post-content" rows="4" placeholder="Type your message or paste a link here..."></textarea>
+        <section id="trending" class="content-row">
+            <h2>Trending Now</h2>
+            <div class="content-grid">
+                <!-- Placeholder Content Cards -->
+                <div class="content-card" data-content-id="t1">
+                    <img src="https://via.placeholder.com/300x170/FF0000/FFFFFF?text=Trending+1" alt="Trending Content 1">
+                    <h3>Action Packed Series</h3>
+                </div>
+                <div class="content-card" data-content-id="t2">
+                    <img src="https://via.placeholder.com/300x170/00FF00/FFFFFF?text=Trending+2" alt="Trending Content 2">
+                    <h3>Romantic Comedy Movie</h3>
+                </div>
+                <div class="content-card" data-content-id="t3">
+                    <img src="https://via.placeholder.com/300x170/0000FF/FFFFFF?text=Trending+3" alt="Trending Content 3">
+                    <h3>Sci-Fi Adventure</h3>
+                </div>
+                 <div class="content-card" data-content-id="t4">
+                    <img src="https://via.placeholder.com/300x170/FFFF00/000000?text=Trending+4" alt="Trending Content 4">
+                    <h3>Gripping Thriller</h3>
+                </div>
+                <!-- Add more cards -->
             </div>
+        </section>
 
-            <!-- 3. Custom Message (Included in Post Content) -->
-            <!-- Assuming custom message is part of the main content -->
+        <!-- 2️⃣ Content Categories -->
+        <section id="web-series" class="content-row">
+            <h2>Latest Web Series</h2>
+            <div class="content-grid">
+                 <div class="content-card" data-content-id="s1">
+                    <img src="https://via.placeholder.com/300x170/FFA500/FFFFFF?text=Series+1" alt="Web Series 1">
+                    <h3>Mystery Chronicles</h3>
+                </div>
+                 <div class="content-card" data-content-id="s2">
+                    <img src="https://via.placeholder.com/300x170/800080/FFFFFF?text=Series+2" alt="Web Series 2">
+                    <h3>Fantasy Realm</h3>
+                </div>
+                <!-- Add more cards -->
+            </div>
+        </section>
 
-            <div class="form-group">
-                <h3>Select Target Groups/Channels:</h3>
-                <div id="target-groups">
-                    <!-- Checkboxes for groups will appear here -->
-                    <p><i>Add groups above to see them here.</i></p>
+        <section id="movies" class="content-row">
+            <h2>New Movies</h2>
+            <div class="content-grid">
+                 <div class="content-card" data-content-id="m1">
+                    <img src="https://via.placeholder.com/300x170/FFC0CB/000000?text=Movie+1" alt="Movie 1">
+                    <h3>Drama Special</h3>
+                </div>
+                 <div class="content-card" data-content-id="m2">
+                    <img src="https://via.placeholder.com/300x170/008080/FFFFFF?text=Movie+2" alt="Movie 2">
+                    <h3>Animated Feature</h3>
+                </div>
+                <!-- Add more cards -->
+            </div>
+        </section>
+
+         <section id="short-films" class="content-row">
+            <h2>Exclusive Short Films</h2>
+            <div class="content-grid">
+                 <div class="content-card" data-content-id="f1">
+                    <img src="https://via.placeholder.com/300x170/A52A2A/FFFFFF?text=Short+1" alt="Short Film 1">
+                    <h3>The Last Stand</h3>
+                </div>
+                <!-- Add more cards -->
+            </div>
+        </section>
+
+        <!-- 6️⃣ Subscription Model Placeholder -->
+         <section id="subscription-promo" class="promo-section">
+            <h2>Unlock Everything</h2>
+            <p>Get unlimited access to all content with StreamVerse Premium.</p>
+            <button id="subscribe-btn" class="cta">Subscribe Now</button>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2023 StreamVerse. All Rights Reserved.</p>
+        <p><a href="#">About Us</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        <!-- Admin Panel Link (Non-functional) -->
+        <p><a href="#" title="Admin access required">Admin Panel</a></p>
+         <!-- 3️⃣ Multi-Language Support Placeholder -->
+         <select id="language-selector">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="es">Español</option>
+         </select>
+         <!-- 🔟 Push Notifications Placeholder -->
+         <button id="notify-btn" title="Enable notifications (requires browser support & backend)">Enable Notifications</button>
+    </footer>
+
+    <!-- Modals -->
+    <!-- 4️⃣ User Authentication Modals -->
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit" class="cta">Login</button>
+                <p><a href="#" id="forgot-password-link">Forgot Password?</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="signup-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit" class="cta">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+     <!-- 6️⃣ Subscription Modal -->
+     <div id="subscribe-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Subscription Plans</h2>
+            <div class="plan">
+                <h3>Free</h3>
+                <p>Limited Content, Ads Supported</p>
+                <button disabled>Current Plan</button>
+            </div>
+             <div class="plan premium">
+                <h3>Premium</h3>
+                <p>All Content, Ad-Free, HD/4K</p>
+                <p class="price">$9.99 / month</p>
+                <button class="cta">Choose Premium</button>
+            </div>
+             <p><i>Payment processing is not implemented in this prototype.</i></p>
+        </div>
+    </div>
+
+    <!-- 5️⃣ Content Playback Placeholder Modal -->
+     <div id="player-modal" class="modal hidden">
+        <div class="modal-content player-area">
+            <span class="close-btn">×</span>
+            <h2>Now Playing: <span id="player-title">Content Title</span></h2>
+            <div class="video-placeholder">
+                <i class="fas fa-play-circle" style="font-size: 5em; color: #ccc;"></i>
+                <p>Actual video playback requires backend integration.</p>
+                 <div class="player-controls-placeholder">
+                    <button><i class="fas fa-backward"></i></button>
+                    <button><i class="fas fa-pause"></i></button>
+                    <button><i class="fas fa-forward"></i></button>
+                    <select>
+                        <option>Auto</option>
+                        <option>1080p</option>
+                        <option>720p</option>
+                    </select>
+                    <select>
+                        <option>English (Audio)</option>
+                        <option>Hindi (Audio)</option>
+                    </select>
+                     <select>
+                        <option>Off</option>
+                        <option>English (Subs)</option>
+                        <option>Spanish (Subs)</option>
+                    </select>
                 </div>
             </div>
-
-            <!-- 4. Auto-Send Feature -->
-            <div class="form-group send-options">
-                <h3>Send Options:</h3>
-                <label>
-                    <input type="radio" name="send-option" value="now" checked> Send Now
-                </label>
-                <label>
-                    <input type="radio" name="send-option" value="schedule"> Schedule for Later
-                </label>
-                <input type="datetime-local" id="schedule-time" style="display: none;">
-            </div>
-
-            <button id="send-post-btn">Submit Post</button>
-        </section>
-
-        <hr>
-
-        <!-- 5. Tracking & Logs -->
-        <section id="logs">
-            <h2>5️⃣ Tracking & Logs</h2>
-            <ul id="log-list">
-                <!-- Log entries will be listed here -->
-                <li><i>No posts sent yet.</i></li>
-            </ul>
-        </section>
-
+        </div>
     </div>
+
 
     <script src="script.js"></script>
 </body>
-                  </html>
+                                                      </html>
